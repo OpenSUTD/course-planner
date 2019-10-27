@@ -14,9 +14,10 @@
     height: 1800px;
 	}
 	#calendar {
-		width: 49%;
+		width: 47%;
 		height: 100%;
 		float: left;
+		margin-left: 5px;
 		border: 1px solid rgba(75,181,243,0.5);
 		background-color: rgba(21,116,171,0.12);
 		box-shadow: 0px 0px 10px 5px rgba(217,231,241,0.2) inset;
@@ -24,14 +25,15 @@
 		overflow: hidden;
 	}
 	#subjects {
-		width: 49%;
+		width: 47%;
 		height: 100%;
+		margin-left: 20px;
 		float: left;
 
 		background-color: rgba(21,16,71,0.12);
 		box-shadow: 0px 0px 10px 5px rgba(217,231,241,0.2) inset;
 		border-radius: 20px;
-		overflow: hidden;
+		overflow: scroll;
 	}
 	#clear {
 	    clear: both;
@@ -62,18 +64,27 @@
 
 </head>
 <body>
+	<div id="header" style="text-align: center;">
 	<h1>Hi, Welcome to the study planner</h1>
 	<p> Please choose your pillar: 
 		<select id="pillar">
-			<option value="NA">Please select a Pillar</option>
+			<option value="NA">-</option>
 			<option value="ESD">ESD</option>
 			<option value="EPD">EPD</option>
 			<option value="ISTD">ISTD(future dev)</option>
 			<option value="ASD">ASD(future dev)</option>
 		</select>
 	</p>
-	<button onclick="NaivePlanner()">Submit</button>	
+	<button onclick="NaivePlanner()">Submit</button>
+	</div>	
 
+	<div id="trackAndMinor"  style="text-align: center;">
+		<ul style="list-style-type:none">
+			<li><strong>According to your pillar and subject choices, you will be graduating with:</strong></li>
+			<li><strong>Track:</strong><span id="track"></span></li>
+			<li><strong>Minor:</strong><span id="minor"></span></li>
+		</ul>
+	</div>
 	<p>
 	<div id="container">
 		<div id="calendar"></div>
