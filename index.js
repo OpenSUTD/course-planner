@@ -218,7 +218,10 @@ function overload(elem){
 	console.log(elem.value)
 	if(elem.checked == true){
 	limit[parseInt(elem.value)-4] = 5}
-	else{limit[parseInt(elem.value)-4] = 4}
+	else{
+		limit[parseInt(elem.value)-4] = 4
+		
+	}
 }
 
 function EnrollMod(result,data,pillar){
@@ -236,23 +239,29 @@ function EnrollMod(result,data,pillar){
 
 	console.log("past subject: " + past_subject)
 	console.log("Pre_requisite: "+ data.Pre_requisite)
-	let metRequiste = data.Pre_requisite.every(r=> past_subject.includes(r))
+	// let metRequiste = data.Pre_requisite.every(r=> past_subject.includes(r))
 	
+	let failRequiste = []
+
+	for (var i = 0; i < data.Pre_requisite.length; i++) {
+		if(!past_subject.includes(data.Pre_requisite[i])){failRequiste = failRequiste.concat(data.Pre_requisite[i])}
+	}
 	let totalCourseTaken = Object.values(courseTaken).join().split(",")
 
 	let taken = totalCourseTaken.includes(data.Code)
 	
 	// if metRequiste, course per term < 4 (-HASS) , not taken before 
-	console.log("Met requiste: " + metRequiste)
+	console.log("Met requiste: " + (failRequiste.length == 0))
 	console.log("Current course number during this term : " + courseTaken[result].length)
 	console.log("taken? "+ taken)
 
-	if(!metRequiste){
-		alert("Fail to met Pre-requisite of " + data.Pre_requisite)
+	if(failRequiste.length > 0){
+
+		alert("Fail to met Pre-requisite of :" + failRequiste)
 	}
 	else if(taken){ alert("Help....You have already taken the subject")}
 	else if(courseTaken[result].length >= limit[parseInt(result[result.length-1])-4]){
-		alert("Mods are not the more the merrier. Get a life please")
+		alert("Mods are not the more the merrier.") //Get a life please
 	}
 	else{ // if(metRequiste && courseTaken[result].length < limit[parseInt(result[result.length-1])-4] && !taken)
 
