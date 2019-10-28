@@ -9,9 +9,8 @@
 
 ## Future dev (upcoming in weeks to come)
 * Minor
-* Co-requisites
 * ASD
-* dynamic dataset
+* dynamic dataset (web scrap)
 * etc
 
 ## How to use
@@ -38,11 +37,11 @@ Pre-requisite: pre-requisite separate by ; <br>
 Alt-requisite: requisites where you get to choose 1 from a set(i.e 01.112 or 40.319) 
 
 #### _track.csv_
-Track : Name of Track
-Required: Fixed required courses, i.e AI for AI track
-ReqOption: requirement where you get to choose 1 from a selection
-Option: Required Elective Options
-OptionNumber: Number of electives required
-Pillar : Pillar of the track being offered.
+Track : Name of Track<br>
+Required: Fixed required courses, i.e AI for AI track<br>
+ReqOption: requirement where you get to choose 1 from a selection<br>
+Option: Required Elective Options<br>
+OptionNumber: Number of electives required<br>
+Pillar : Pillar of the track being offered.<br>
 
-#### data available at https://docs.google.com/spreadsheets/d/1U0CjPyIO5QSkeEE6_UD0plZh9k9K_YIbigzXHLnNG44/edit?usp=sharing 
+#### data available at https://docs.google.com/spreadsheets/d/1U0CjPyIO5QSkeEE6_UD0plZh9k9K_YIbigzXHLnNG44/edit?usp=sharing (please copy and not change the master copy)
