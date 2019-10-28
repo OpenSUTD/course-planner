@@ -1,15 +1,16 @@
 # Simple Course Planner.
 
 ##  Currently able to:
-* Plan for course in consideration of pre-requisites
+* Plan for course in consideration of pre-requisites, alternative pre-requisites (i.e 01.112/40.319)
 * Plan for course in consideration of offered Terms
 * Overload
-* Browser brief course description
+* Browse brief course description
+* Track recognition (ESD, ISTD)
+
 
 ## Future dev (upcoming in weeks to come)
-* Minor and Track recognition
+* Minor
 * Co-requisites
-* Alternative pre-requisites
-* ISTD and ASD
+* ASD
 * dynamic dataset
 * etc
