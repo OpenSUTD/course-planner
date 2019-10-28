@@ -1,3 +1,15 @@
-# coddyzz.github.io
+# Simple Course Planner.
 
-Google Sheets for course data input (Prototype): https://docs.google.com/spreadsheets/d/1U0CjPyIO5QSkeEE6_UD0plZh9k9K_YIbigzXHLnNG44/edit?usp=sharing
+##  Currently able to:
+* Plan for course in consideration of pre-requisites
+* Plan for course in consideration of offered Terms
+* Overload
+* Browser brief course description
+
+## Future dev (upcoming in weeks to come)
+* Minor and Track recognition
+* Co-requisites
+* Alternative pre-requisites
+* ISTD and ASD
+* dynamic dataset
+* etc
