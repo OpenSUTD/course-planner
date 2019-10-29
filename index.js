@@ -336,6 +336,7 @@ function EnrollMod(term,data,pillar){
 
 		// call findTrack() and findMinor to see if any track and minor is satisfied 
 		findTrack(pillar)
+		findMinor(pillar)
 
 		// hide the selected mod on the subject list
 		d3.select("#subjects").select("svg").select('[id="'+data.Code+'"]').style("display","none")
@@ -408,6 +409,7 @@ function EnrollMod(term,data,pillar){
 
 				// check track and minor condition once again
 				findTrack(pillar)
+				findMinor(pillar)
 
 			}
 		})		
@@ -448,16 +450,41 @@ function findTrack(pillar){
 	$("#track").text(tracks)
 }
 
-// function findMinor(pillar){
+function findMinor(pillar){
 
-// 	let allTakenCourses = Object.values(courseTaken).join().split(",")
+	/*
+	This function finds the Minor Program, if any
+	*/
 
+	let allTakenCourses = Object.values(courseTaken).join().split(",")
 
+	// limit search dataset to those available for the selected pillar only
+	let pillarOnly = mdata.filter(function(entry){return entry.major===pillar})
 
-// 	console.log("Track: "+ tracks)
+	// initial track = nothing
+	let minor = ""
 
-// 	$("#track").text(tracks)
-// }
+	//=================Looking for better algo ===========================
+	// exhausive search 
+	//============================================
+	pillarOnly.forEach(function(d){ // for each track
+		console.log(d)
+		// if taken all the required course
+		if(d.required_course.every(r=> allTakenCourses.includes(r))){ 
+			// if taken the required choose 1 mod, i.e ML or SML, if there's any of such choices
+			if(d.select1.length == 0 || d.select1.every(mod=> mod.some(r=> allTakenCourses.includes(r)))){
+				// if taken at least n required electives, i.e 4 elective in ISTD case
+				if(d.selectN.length == 0 || d["selectN"][0].filter(r => allTakenCourses.includes(r)).length >= d["n"][0]){
+					console.log("first met")
+					if(d.selectN.length == 1 || d["selectN"][1].filter(r => allTakenCourses.includes(r)).length >= d["n"][1]){
+					minor +=  d.Minor + ";  " // add the track
+					}
+				}
+			}
+		}
+	})
+	$("#minor").text(minor)
+}
 
 
 //============================================
@@ -535,8 +562,8 @@ d3.csv("data - _minor.csv",
 			Minor:d.Minor,
 			required_course:((d["Required"] == "") ? [] : d["Required"].split(";")), // must take
 			select1:((d["ReqOption"] == "") ? [] : d["ReqOption"].split("#").map(function(e) {return e.split(";");})), // select 1 from
-			selectN:((d["Option"] == "") ? [] : d["Option"].split(";")),
-			n: +d.OptionNumber,
+			selectN:((d["Option"] == "") ? [] : d["Option"].split("#").map(function(e) {return e.split(";");})),
+			n: d.OptionNumber.split(";").map(Number),
 			major: d.Pillar	
 	}; }).then(function(d){
 	mdata = d; 
