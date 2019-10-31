@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SUTD Study Planner</title>
+
+	<!-- Scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v5.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+	<script src="index.js"></script>
+
+	<!-- Styling -->
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Staatliches&display=swap" rel="stylesheet">
+
+</head>
+<body>
+	<div id="main">
+		<div id="header" style="text-align: center;">
+			<h1 style="font-family: 'Staatliches', cursive;color:dimgray;">OpenSUTD Study Planner</h1>
+			<button class="button-style-1" onclick="alert('1. Select your pillar and click Submit.' + '\n' +
+			'2. Hover over each module for course description.' + '\n' + '3. Click a module to add into the planner on the left.'
+			+ '\n' + '4. Click on any module in the planner to remove the module.' + '\n' +
+			'5. Select the Overload checkbox if you are overloading.' + '\n' + '6. Your academic track will be automatically calculated.')">How to Use</button>
+			<button class = "button-style-1" onclick="colorCode()">Color Code</button>
+			<button class="button-style-1" onclick="alert(JSON.stringify(courseTaken,null))"> Courses Taken</button>
+			<p> Please choose your pillar:
+				<div class="custom-select">
+					<select id="pillar">
+						<option value="NA">-</option>
+						<option value="ESD">ESD</option>
+						<option value="EPD">EPD</option>
+						<option value="ISTD">ISTD</option>
+						<option value="ASD">ASD(future dev)</option>
+					</select>
+				</div>
+				<button onclick="NaivePlanner()" class="button-style-2">Submit</button>
+			</p>
+		</div> <!--#header-->
+
+		<div id="trackAndMinor"  style="text-align: center;">
+			<table border="0" align="center">
+				<tr>
+					<td colspan=2><strong>According to your pillar and subject choices,<br> you will be graduating with:</strong></td>
+				</tr>
+				<tr><td><br></td></tr>
+				<tr style="text-align: left;">
+					<td> <strong>Track:</strong></td>
+					<td><span id="track"></span> </td>
+				</tr>
+				<tr style="text-align: left;">
+					<td> <strong>Minor:</strong> </td>
+					<td> <span id="minor"></span> </td>
+				</tr>
+			</table>
+		</div> <!--#trackAndMinor-->
+		<p>
+		<div id="container">
+			<div id="calendar"></div>
+			<div id="subjects"></div>
+		    <div id="clear"></div>
+		</div> <!--#container-->
+	</div> <!--#main-->
+
+
+</body>
+</html>
