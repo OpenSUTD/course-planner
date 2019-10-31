@@ -96,16 +96,17 @@ function NaivePlanner() {
     	.attr("height", 30)
 		.style("fill",function(d){
 			if(d[pillar+"_Core"] == 1){return "rgba(255,255,0,0.5)"} //if core => yellow
-			else if(d.HASS){return "rgba(0,255,0,0.5"} //if HASS => Green
-			else{return "rgba(0,0,255,0.5)"} //else => blue
+			else {return getColor(parseInt(d.Code))}
 		})
 		.attr("stroke", "black")
         .on("mouseover", function(d) {
-        	// on mouseover show indictor box with course detail and prof, by increasing the opacity		
+        	// on mouseover show indictor box with course detail and prof, by increasing the opacity
+        	let options = filterAvailableTerm(d)
+
             div.transition()		
                 .duration(200)		
                 .style("opacity", .9);		
-            div	.html(d.Description + "<br><br>  Instructed by: " + d.Professor)	
+            div	.html(d.Description + "<br><br>  Instructed by: " + d.Professor + "<br><br> Instructed in :" + options)	
                 .style("left", (d3.event.pageX) + "px")		
                 .style("top", (d3.event.pageY - 28) + "px");	
             })					
@@ -122,7 +123,7 @@ function NaivePlanner() {
 		.style("text-anchor","left")
 		.on("click",function(d){
 
-			options = filterAvailableTerm(d)
+			let options = filterAvailableTerm(d)
 
 			// Dialog box to indicate choice
 			ConfirmDialog('Enrolling '+d.Code +' ' + d.Subject + ' in',
@@ -141,7 +142,6 @@ function NaivePlanner() {
 		.style("text-align","center")
 		.html("<p><strong>Term 4"+" </strong>") // no checkbox
 
-	courseTaken["Term_4"] = courseTaken["Term_4"].concat(["02.000"]) // HASS
 	// for term 5 - 7:
 	for (var i = 5; i < 8; i++) {
 		d3.select("#calendar").append("div")
@@ -151,8 +151,6 @@ function NaivePlanner() {
 		.html("<p><strong>Term "+ i+" </strong>\
 		<input type=\"checkbox\" value=" + i +" onclick=\"overload(this)\"> Overload</p>") // put in a checkbox for overload
 
-		// Indicate HASS as a taken mod
-		courseTaken["Term_"+i] = courseTaken["Term_"+i].concat(["02.000"]) // HASS
 	}
 
 	// Term 8 no overload, therefore
@@ -161,9 +159,6 @@ function NaivePlanner() {
 		.attr("class","schedule")
 		.style("text-align","center")
 		.html("<p><strong>Term 8"+" </strong>") // no checkbox
-
-	courseTaken["Term_8"] = courseTaken["Term_8"].concat(["02.000"]) // HASS
-
 
 
 	//============================================
@@ -219,6 +214,28 @@ function NaivePlanner() {
 	}
 }
 
+function getColor(i){
+	var color
+	switch (i){
+		case 1: //TAE
+			color = "rgba(0,0,255,0.5)" //blue
+			break;
+		case 2: //HASS 
+			color = "rgba(0,255,0,0.5)" //yellow
+			break;
+		case 30: // EPD
+			color = "rgba(255,0,175,0.5)" //pink
+			break;
+		case 40: // ESD
+			color = "rgba(125,255,0,0.5)" // green
+			break;
+		case 50: // ISTD
+			color = "rgba(0,255,175,0.5)" // cyan
+			break;
+	}	
+	return color
+}
+
 function filterAvailableTerm(d){
 	const allowed = ["Term_4", "Term_5", "Term_6", "Term_7", "Term_8"];
 
@@ -271,6 +288,35 @@ function ConfirmDialog(message,head,option1,option2,data,pillar) {
 		buttons: options,
 	});
 };
+
+function colorCode(){
+
+	let html_string = '<div>'
+
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:rgba(255,255,0,0.5);"></div><strong> Core</strong><br>'
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:'+ getColor(1) +';"></div><strong> TAE</strong><br>'
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:'+ getColor(2) +';"></div><strong> HASS</strong><br>'
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:'+ getColor(30) +';"></div><strong> EPD</strong><br>'
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:'+ getColor(40) +';"></div><strong> ESD</strong><br>'
+	html_string += '<div style="width:20px;height:20px;display: inline-block;background-color:'+ getColor(50) +';"></div><strong> ISTD</strong><br>'
+
+
+	// console.log(html_string)
+	//============================================
+	// Some html config for the box
+	//============================================
+	$('<div></div>').appendTo('body')
+	.html(html_string +'</div>')
+	.dialog({
+		modal: true,
+		title: "Colors",
+		zIndex: 10000,
+		autoOpen: true,
+		width: 200,
+		resizable: false	,
+		buttons: {close: function(event,ui){$(this).remove()}},
+	});	
+}
 
 function overload(elem){
 	/*
@@ -353,7 +399,7 @@ function EnrollMod(term,data,pillar){
 	}
 	else{ // if(metRequiste && courseTaken[term].length < limit[parseInt(term[term.length-1])-4] && !taken)
 
-		if(data.HASS && hassTaken.count[parseInt(term[term.length-1])-4] > 0){
+		if(data.HASS && hassTaken[parseInt(term[term.length-1])-4] > 0){
 			alert("One HASS per term, for now")
 			return
 		}
@@ -381,14 +427,13 @@ function EnrollMod(term,data,pillar){
 			.attr("class","mod")
 			.attr("x",40)
 			.attr("y", function(d){	
-				if(data.HASS){return 150}
+				if(data.HASS){return 180}
 				else{return 30 +  possibleYValue[term][0]}})
 	    	.attr("width", $("#calendar").width()*0.9)
 	    	.attr("height", 30)
 			.style("fill",function(d){
 				if(data[pillar+"_Core"] == 1){return "rgba(255,255,0,0.5)"} //if core => yellow
-				else if(data.HASS){return "rgba(0,255,0,0.5"} //if HASS => Green
-				else{return "rgba(0,0,255,0.5)"} //else => blue
+				else {return getColor(parseInt(d.Code))}
 			})
 			.attr("stroke", "black")
 	        .on("mouseover", function(d) {
@@ -412,9 +457,9 @@ function EnrollMod(term,data,pillar){
 		.attr("transform", function(d) { 
 			let out;
 			if(data.HASS){out =  "translate(" + 50 + "," + 200 + ")"}
-			else{out = "translate(" + 50 + "," +(possibleYValue[term][0] + 50) + ")"}
-				
-			possibleYValue[term].shift()  // remove first y value <- the last line is the last usage of this y-value
+			else{out = "translate(" + 50 + "," +(possibleYValue[term][0] + 50) + ")" 
+				possibleYValue[term].shift() 			  // remove first y value <- the last line is the last usage of this y-value
+			}	
 			return out})
 		.text(function(d){return data.Code +" " + data.Subject})
 		.style("font", "15px sans-serif")
