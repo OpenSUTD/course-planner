@@ -42,6 +42,10 @@ function NaivePlanner() {
 		Term_7:[],
 		Term_8:[]}
 
+	// clear track and minor
+	$("#track").text("")
+	$("#minor").text("")
+
 
 	//============ Needs Attention ================================ (Would like to say if ESD is choose put all the 40.XXX on top <- yet to be done)
 	//Sorting the data, so that all the core mod appear in the top.
@@ -118,17 +122,7 @@ function NaivePlanner() {
 		.style("text-anchor","left")
 		.on("click",function(d){
 
-			const allowed = ["Term_4", "Term_5", "Term_6", "Term_7", "Term_8"];
-
-			let temp = JSON.parse(JSON.stringify(d)) //deep copy the data entry
-
-			// find key == allowed
-			Object.keys(temp)
-			  .filter(key => !allowed.includes(key))
-			  .forEach(key => delete temp[key]);
-
-			// find allowed term, i.e Term_4 == 1
-			options = Object.keys(temp).filter(function(key) {return temp[key] === 1})
+			options = filterAvailableTerm(d)
 
 			// Dialog box to indicate choice
 			ConfirmDialog('Enrolling '+d.Code +' ' + d.Subject + ' in',
@@ -140,8 +134,16 @@ function NaivePlanner() {
 	//============================================
 	// Create 1 SVG for each term on the left panel
 	//============================================
-	// for term 4 - 7:
-	for (var i = 4; i < 8; i++) {
+	// Term 4 no overload
+	d3.select("#calendar").append("div")
+		.attr("id","Term_4")
+		.attr("class","schedule")
+		.style("text-align","center")
+		.html("<p><strong>Term 4"+" </strong>") // no checkbox
+
+	courseTaken["Term_4"] = courseTaken["Term_4"].concat(["02.000"]) // HASS
+	// for term 5 - 7:
+	for (var i = 5; i < 8; i++) {
 		d3.select("#calendar").append("div")
 		.attr("id","Term_"+i)
 		.attr("class","schedule")
@@ -155,10 +157,10 @@ function NaivePlanner() {
 
 	// Term 8 no overload, therefore
 	d3.select("#calendar").append("div")
-		.attr("id","Term_"+i)
+		.attr("id","Term_8")
 		.attr("class","schedule")
 		.style("text-align","center")
-		.html("<p><strong>Term "+ i+" </strong>") // no checkbox
+		.html("<p><strong>Term 8"+" </strong>") // no checkbox
 
 	courseTaken["Term_8"] = courseTaken["Term_8"].concat(["02.000"]) // HASS
 
@@ -217,6 +219,21 @@ function NaivePlanner() {
 	}
 }
 
+function filterAvailableTerm(d){
+	const allowed = ["Term_4", "Term_5", "Term_6", "Term_7", "Term_8"];
+
+	let temp = JSON.parse(JSON.stringify(d)) //deep copy the data entry
+
+	// find key == allowed
+	Object.keys(temp)
+	  .filter(key => !allowed.includes(key))
+	  .forEach(key => delete temp[key]);
+
+	// find allowed term, i.e Term_4 == 1
+	options = Object.keys(temp).filter(function(key) {return temp[key] === 1})
+
+	return options
+}
 function ConfirmDialog(message,head,option1,option2,data,pillar) {
 	/*
 	This function creates a customised dialog box with option1 and option2
