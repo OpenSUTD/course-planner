@@ -68,11 +68,12 @@ function NaivePlanner() {
 	    .style("opacity", 0);
 
 	//============================================
-	// Create the SVG that contain all the mod (right column)
+	// Create the SVGs
 	//============================================
 	var svg = d3.select("#subjects").append("svg")
 	      .attr("width", $("#subjects").width())
 	      .attr("height", 60*data.length) // each mod(rect) get a space of 60px in height
+
 
 	//============================================
 	// Append g and each mod's rect and text
@@ -91,6 +92,7 @@ function NaivePlanner() {
     	.attr("height", 30)
 		.style("fill",function(d){
 			if(d[pillar+"_Core"] == 1){return "rgba(255,255,0,0.5)"} //if core => yellow
+			else if(d.HASS){return "rgba(0,255,0,0.5"} //if HASS => Green
 			else{return "rgba(0,0,255,0.5)"} //else => blue
 		})
 		.attr("stroke", "black")
@@ -160,27 +162,33 @@ function NaivePlanner() {
 
 	courseTaken["Term_8"] = courseTaken["Term_8"].concat(["02.000"]) // HASS
 
+
+
 	//============================================
-	// Append HASS to the svg of each term >.<
+	// Append SVG for left calendar
 	//============================================
+
 	var svg2 = d3.selectAll(".schedule").append("svg")
 		.attr("width", $("#calendar").width())
 	    .attr("height", 300)
+	//============================================
+	// Append HASS to the svg of each term >.<
+	//============================================
 
-	svg2.append("rect")
-		.attr("class","mod")
-		.attr("x",40)
-		.attr("y", 180)
-    	.attr("width", $("#calendar").width()*0.9)
-    	.attr("height", 30)
-		.style("fill","lightgreen")
-		.attr("stroke", "black")
+	// svg2.append("rect")
+	// 	.attr("class","mod")
+	// 	.attr("x",40)
+	// 	.attr("y", 180)
+ //    	.attr("width", $("#calendar").width()*0.9)
+ //    	.attr("height", 30)
+	// 	.style("fill","lightgreen")
+	// 	.attr("stroke", "black")
 
-	svg2.append("text")
-		.attr("transform","translate(" + 50 + "," +200 + ")")
-		.text("HASS")
-		.style("font", "15px sans-serif")
-		.style("text-anchor","left")
+	// svg2.append("text")
+	// 	.attr("transform","translate(" + 50 + "," +200 + ")")
+	// 	.text("HASS")
+	// 	.style("font", "15px sans-serif")
+	// 	.style("text-anchor","left")
 
 	//============================================
 	// Append Capstone for Term 7 & 8
@@ -302,13 +310,12 @@ function EnrollMod(term,data,pillar){
 
 	//============================================
 	// Find all the past courses taken and check if user has already taken the course, i.e take 30.007 in term 5 and term 7
-	//============================================
+
 	let allTakenCourses = Object.values(courseTaken).join().split(",")
 
 	let taken = allTakenCourses.includes(data.Code)
 
-	
-	//============================================
+	//============================================	
 	// Console log the criteria
 	//============================================
 	// console.log("Met requiste: " + (failedRequisite.length == 0))
@@ -329,10 +336,17 @@ function EnrollMod(term,data,pillar){
 	}
 	else{ // if(metRequiste && courseTaken[term].length < limit[parseInt(term[term.length-1])-4] && !taken)
 
+		if(data.HASS && hassTaken.count[parseInt(term[term.length-1])-4] > 0){
+			alert("One HASS per term, for now")
+			return
+		}
 		// console.log("enrolling: " + data.Code)
 
 		// add mod to course taken
 		courseTaken[term] = courseTaken[term].concat([data.Code])
+		if(data.HASS){
+			hassTaken[parseInt(term[term.length-1])-4] += 1
+		}
 
 		// call findTrack() and findMinor to see if any track and minor is satisfied 
 		findTrack(pillar)
@@ -349,11 +363,14 @@ function EnrollMod(term,data,pillar){
 		t_svg.append("rect")
 			.attr("class","mod")
 			.attr("x",40)
-			.attr("y", function(d){	return 30 +  possibleYValue[term][0]})
+			.attr("y", function(d){	
+				if(data.HASS){return 150}
+				else{return 30 +  possibleYValue[term][0]}})
 	    	.attr("width", $("#calendar").width()*0.9)
 	    	.attr("height", 30)
 			.style("fill",function(d){
 				if(data[pillar+"_Core"] == 1){return "rgba(255,255,0,0.5)"} //if core => yellow
+				else if(data.HASS){return "rgba(0,255,0,0.5"} //if HASS => Green
 				else{return "rgba(0,0,255,0.5)"} //else => blue
 			})
 			.attr("stroke", "black")
@@ -376,7 +393,10 @@ function EnrollMod(term,data,pillar){
 		t_svg.append("text")
 		.attr("id",function(d) {return possibleYValue[term][0] }) // id as y-value
 		.attr("transform", function(d) { 
-			let out = "translate(" + 50 + "," +(possibleYValue[term][0] + 50) + ")"
+			let out;
+			if(data.HASS){out =  "translate(" + 50 + "," + 200 + ")"}
+			else{out = "translate(" + 50 + "," +(possibleYValue[term][0] + 50) + ")"}
+				
 			possibleYValue[term].shift()  // remove first y value <- the last line is the last usage of this y-value
 			return out})
 		.text(function(d){return data.Code +" " + data.Subject})
@@ -506,6 +526,7 @@ var courseTaken = {
 	Term_7:[],
 	Term_8:[]}
 
+var hassTaken = [0,0,0,0,0]
 //============================================
 // Data Fetching
 //============================================
@@ -527,6 +548,7 @@ d3.csv("data - _courses.csv",
 		Term_6 : +d["Term 6"],
 		Term_7 : +d["Term 7"],
 		Term_8 : +d["Term 8"],
+		HASS: (parseInt(d.Code) == 2), 
 		Pre_requisite :((d["Pre-requisite"] == "") ? [] : d["Pre-requisite"].split(";")),
 		Pre_requisite_select1 : ((d["Alt-requisite"] == "") ? [] : d["Alt-requisite"].split("#").map(function(e) {return e.split(";");})) 
 	}; })
