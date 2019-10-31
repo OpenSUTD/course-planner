@@ -3,12 +3,12 @@
 ##  Currently able to:
 * Plan for course in consideration of pre-requisites, alternative pre-requisites (i.e 01.112/40.319)
 * Plan for course in consideration of offered Terms
-* Overload
+* Overload (Term 5,6,7)
 * Browse brief course description
 * Track recognition (ESD, ISTD)
+* Minor recognition (ESD, ISTD, HASS)
 
 ## Future dev (upcoming in weeks to come)
-* Minor
 * ASD
 * dynamic dataset (web scrap)
 * etc
