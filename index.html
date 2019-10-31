@@ -2,105 +2,70 @@
 <html>
 <head>
 	<title>SUTD Study Planner</title>
+
+	<!-- Scripts -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://d3js.org/d3.v5.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 	<script src="index.js"></script>
-	<style type="text/css">
-	#container {
-    width: 100%;
-    margin: auto;
-    height: 1800px;
-	}
-	#calendar {
-		width: 47%;
-		height: 100%;
-		float: left;
-		margin-left: 5px;
-		border: 1px solid rgba(75,181,243,0.5);
-		background-color: rgba(21,116,171,0.12);
-		box-shadow: 0px 0px 10px 5px rgba(217,231,241,0.2) inset;
-		border-radius: 20px;
-		overflow: hidden;
-	}
-	#subjects {
-		width: 47%;
-		height: 100%;
-		margin-left: 20px;
-		float: left;
 
-		background-color: rgba(21,16,71,0.12);
-		box-shadow: 0px 0px 10px 5px rgba(217,231,241,0.2) inset;
-		border-radius: 20px;
-		overflow: scroll;
-	}
-	#clear {
-	    clear: both;
-	}
-	#schedule{
-		width: 80%;
-		height: 17%;
-		float: left;
-		background-color: rgba(21,16,71,0.12);
-		box-shadow: 0px 0px 10px 5px rgba(217,231,241,0.2) inset;
-		border-radius: 20px;
-		overflow: hidden;		
+	<!-- Styling -->
+	<link rel="stylesheet" type="text/css" href="style.css" />
 
-	}
-	div.tooltip {	
-    position: absolute;			
-    text-align: center;			
-    width: 300px;					
-    height: xx;					
-    padding: 2px;				
-    font: 12px sans-serif;		
-    background: lightsteelblue;	
-    border: 0px;		
-    border-radius: 8px;			
-    pointer-events: none;			
-}
-	</style>
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Staatliches&display=swap" rel="stylesheet">
 
 </head>
 <body>
-	<div id="header" style="text-align: center;">
-	<h1>Hi, Welcome to the study planner</h1>
-	<button onclick="alert('\n\
-	Select your pillar\n\
-	Click Submit\n\
-	Hover over the box for course description\n\
-	Click the module\'s text to add into the calendar on the left\n\
-	Click any mod in the calendar(on the left) to remove the module\n\
-	Check overload box if you are overloading\n\
-	Track is automatically calculated\n\
-	ctrl-f to search for the course')">How to Use</button>
-</ul>
-	<p> Please choose your pillar: 
-		<select id="pillar">
-			<option value="NA">-</option>
-			<option value="ESD">ESD</option>
-			<option value="EPD">EPD</option>
-			<option value="ISTD">ISTD</option>
-			<option value="ASD">ASD(future dev)</option>
-		</select>
-	</p>
-	<button onclick="NaivePlanner()">Submit</button>
-	</div>	
+	<div id="main">
+		<div id="header" style="text-align: center;">
+			<h1 style="font-family: 'Staatliches', cursive;color:dimgray;">Hi, Welcome to the study planner</h1>
+			<button class="button-style-1" onclick="alert('\n\
+			Select your pillar\n\
+			Click Submit\n\
+			Hover over the box for course description\n\
+			Click the module\'s text to add into the calendar on the left\n\
+			Click any mod in the calendar(on the left) to remove the module\n\
+			Check overload box if you are overloading\n\
+			Track is automatically calculated\n\
+			ctrl-f to search for the course')">How to Use</button>
+			<p> Please choose your pillar:
+				<div class="custom-select">
+					<select id="pillar">
+						<option value="NA">-</option>
+						<option value="ESD">ESD</option>
+						<option value="EPD">EPD</option>
+						<option value="ISTD">ISTD</option>
+						<option value="ASD">ASD(future dev)</option>
+					</select>
+				</div>
+				<button onclick="NaivePlanner()" class="button-style-2">Submit</button>
+			</p>
+		</div> <!--#header-->
 
-	<div id="trackAndMinor"  style="text-align: center;">
-		<ul style="list-style-type:none">
-			<li><strong>According to your pillar and subject choices, you will be graduating with:</strong></li>
-			<li><strong>Track:</strong><span id="track"></span></li>
-			<li><strong>Minor:</strong><span id="minor"></span></li>
-		</ul>
-	</div>
-	<p>
-	<div id="container">
-		<div id="calendar"></div>
-		<div id="subjects"></div>
-	    <div id="clear"></div>
-	</div>
+		<div id="trackAndMinor"  style="text-align: center;">
+			<table border="0" align="center">
+				<tr>
+					<td colspan=2><strong>According to your pillar and subject choices,<br> you will be graduating with:</strong></td>
+				</tr>
+				<tr style="text-align: left;">
+					<td> <strong>Track:</strong></td>
+					<td><span id="track"></span> </td>
+				</tr>
+				<tr style="text-align: left;">
+					<td> <strong>Minor:</strong> </td>
+					<td> <span id="minor"></span> </td>
+				</tr>
+			</table>
+		</div> <!--#trackAndMinor-->
+		<p>
+		<div id="container">
+			<div id="calendar"></div>
+			<div id="subjects"></div>
+		    <div id="clear"></div>
+		</div> <!--#container-->
+	</div> <!--#main-->
 
 
 </body>
