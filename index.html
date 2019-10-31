@@ -20,16 +20,11 @@
 <body>
 	<div id="main">
 		<div id="header" style="text-align: center;">
-			<h1 style="font-family: 'Staatliches', cursive;color:dimgray;">Hi, Welcome to the study planner</h1>
-			<button class="button-style-1" onclick="alert('\n\
-			Select your pillar\n\
-			Click Submit\n\
-			Hover over the box for course description\n\
-			Click the module\'s text to add into the calendar on the left\n\
-			Click any mod in the calendar(on the left) to remove the module\n\
-			Check overload box if you are overloading\n\
-			Track is automatically calculated\n\
-			ctrl-f to search for the course')">How to Use</button>
+			<h1 style="font-family: 'Staatliches', cursive;color:dimgray;">OpenSUTD Study Planner</h1>
+			<button class="button-style-1" onclick="alert('1. Select your pillar and click Submit.' + '\n' +
+			'2. Hover over each module for course description.' + '\n' + '3. Click a module to add into the planner on the left.'
+			+ '\n' + '4. Click on any module in the planner to remove the module.' + '\n' +
+			'5. Select the Overload checkbox if you are overloading.' + '\n' + '6. Your academic track will be automatically calculated.')">How to Use</button>
 			<button class = "button-style-1" onclick="colorCode()">Color Code</button>
 			<button class="button-style-1" onclick="alert(JSON.stringify(courseTaken,null))"> Courses Taken</button>
 			<p> Please choose your pillar:
@@ -51,6 +46,7 @@
 				<tr>
 					<td colspan=2><strong>According to your pillar and subject choices,<br> you will be graduating with:</strong></td>
 				</tr>
+				<tr><td><br></td></tr>
 				<tr style="text-align: left;">
 					<td> <strong>Track:</strong></td>
 					<td><span id="track"></span> </td>
