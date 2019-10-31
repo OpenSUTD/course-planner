@@ -433,7 +433,7 @@ function EnrollMod(term,data,pillar){
 	    	.attr("height", 30)
 			.style("fill",function(d){
 				if(data[pillar+"_Core"] == 1){return "rgba(255,255,0,0.5)"} //if core => yellow
-				else {return getColor(parseInt(d.Code))}
+				else {return getColor(parseInt(data.Code))}
 			})
 			.attr("stroke", "black")
 	        .on("mouseover", function(d) {
