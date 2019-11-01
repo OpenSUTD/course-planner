@@ -521,8 +521,11 @@ function findTrack(pillar){
 			// if taken the required choose 1 mod, i.e ML or SML, if there's any of such choices
 			if(d.select1.length == 0 || d.select1.every(mod=> mod.some(r=> allTakenCourses.includes(r)))){
 				// if taken at least n required electives, i.e 4 elective in ISTD case
-				if(d.selectN.filter(r => allTakenCourses.includes(r)).length >= d.n){
-					tracks +=  d.Track + ";  " // add the track
+				if(d.selectN.length == 0 || d["selectN"][0].filter(r => allTakenCourses.includes(r)).length >= d["n"][0]){
+					// console.log("first met")
+					if(d.selectN.length == 1 || d["selectN"][1].filter(r => allTakenCourses.includes(r)).length >= d["n"][1]){
+					minor +=  d.Minor + ";  " // add the track
+					}
 				}
 			}
 		}
@@ -550,14 +553,14 @@ function findMinor(pillar){
 	// exhausive search 
 	//============================================
 	pillarOnly.forEach(function(d){ // for each track
-		console.log(d)
+		// console.log(d)
 		// if taken all the required course
 		if(d.required_course.every(r=> allTakenCourses.includes(r))){ 
 			// if taken the required choose 1 mod, i.e ML or SML, if there's any of such choices
 			if(d.select1.length == 0 || d.select1.every(mod=> mod.some(r=> allTakenCourses.includes(r)))){
 				// if taken at least n required electives, i.e 4 elective in ISTD case
 				if(d.selectN.length == 0 || d["selectN"][0].filter(r => allTakenCourses.includes(r)).length >= d["n"][0]){
-					console.log("first met")
+					// console.log("first met")
 					if(d.selectN.length == 1 || d["selectN"][1].filter(r => allTakenCourses.includes(r)).length >= d["n"][1]){
 					minor +=  d.Minor + ";  " // add the track
 					}
@@ -629,8 +632,8 @@ d3.csv("data - _tracks.csv",
 			Track:d.Track,
 			required_course:((d["Required"] == "") ? [] : d["Required"].split(";")), // must take
 			select1:((d["ReqOption"] == "") ? [] : d["ReqOption"].split("#").map(function(e) {return e.split(";");})), // select 1 from
-			selectN:((d["Option"] == "") ? [] : d["Option"].split(";")),
-			n: +d.OptionNumber,
+			selectN:((d["Option"] == "") ? [] : d["Option"].split("#").map(function(e) {return e.split(";");})),
+			n: d.OptionNumber.split(";").map(Number),
 			major: d.Pillar	
 	}; }).then(function(d){
 	tdata = d; 
